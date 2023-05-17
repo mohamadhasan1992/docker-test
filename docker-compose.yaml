@@ -28,7 +28,7 @@ services:
       - './gitlab-runner:/etc/gitlab-runner'
     networks: 
       - gitlab
-  networks:
-    gitlab:
-      name: gitlab-network
+networks:
+  gitlab:
+    name: gitlab-network
     
