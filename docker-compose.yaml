@@ -1,0 +1,51 @@
+version: 3.7
+services:
+  web: 
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    container_name: gitlab-ce
+    environmentt: 
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost'
+    ports: 
+      - "8080:80"
+      - "22:22"
+      - "8443:443"
+    volumes:
+      - './config:/etc/gitlab'
+      - './logs:/var/log/gitlab'
+      - './data:/var/opt/gitlab'
+    networks:
+      - gitlab
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    container_name: gitlab_runner
+    retart: always
+    depends_on: 
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - './gitlab-runner:/etc/gitlab-runner'
+    networks: 
+      - gitlab
+  networks:
+    gitlab:
+      name: gitlab-network
+    
+
+  frontend: 
+    build: 
+      context: .
+      dockerfile: ./path/to/frnt/docker
+    command: npm run start
+    restart: always
+    env_file: 
+      - ./path/to/env
+    depends_on: 
+      - backend
+    volumes:
+      ./:src/inside/dockerfile
+    ports: 
+      "4000:4000"
+  db:
+    image: mongoose-image
