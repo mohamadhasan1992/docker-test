@@ -32,20 +32,3 @@ services:
     gitlab:
       name: gitlab-network
     
-
-  frontend: 
-    build: 
-      context: .
-      dockerfile: ./path/to/frnt/docker
-    command: npm run start
-    restart: always
-    env_file: 
-      - ./path/to/env
-    depends_on: 
-      - backend
-    volumes:
-      ./:src/inside/dockerfile
-    ports: 
-      "4000:4000"
-  db:
-    image: mongoose-image
